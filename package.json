@@ -2,9 +2,9 @@
   "name": "sweet-delight-bakery",
   "version": "1.0.0",
   "description": "Sweet Delight Bakery - Premium 3D Luxury Bakery Website",
-  "main": "index.html",
   "scripts": {
-    "start": "npx serve ."
+    "build": "echo Static site ready",
+    "start": "node server.js"
   },
   "keywords": [
     "bakery",
