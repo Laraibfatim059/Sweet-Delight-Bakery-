@@ -1,0 +1,19 @@
+{
+  "name": "sweet-delight-bakery",
+  "version": "1.0.0",
+  "description": "Sweet Delight Bakery - Premium 3D Luxury Bakery Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "bakery",
+    "luxury",
+    "3d",
+    "threejs",
+    "frontend",
+    "responsive"
+  ],
+  "author": "Sweet Delight Bakery",
+  "license": "MIT"
+}
