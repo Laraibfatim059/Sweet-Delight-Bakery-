@@ -3,14 +3,34 @@ const path = require('path');
 
 console.log('🚀 Running Sweet Delight Bakery production build...');
 
-// Copy root CSS & JS files to root level as direct fallbacks
+// Synchronize root and subfolder assets bidirectionally
+function syncPair(fileA, fileB) {
+  const existsA = fs.existsSync(fileA);
+  const existsB = fs.existsSync(fileB);
+  if (existsA && existsB) {
+    const statA = fs.statSync(fileA);
+    const statB = fs.statSync(fileB);
+    if (statA.mtimeMs > statB.mtimeMs) {
+      fs.copyFileSync(fileA, fileB);
+    } else if (statB.mtimeMs > statA.mtimeMs) {
+      fs.copyFileSync(fileB, fileA);
+    }
+  } else if (existsA && !existsB) {
+    fs.mkdirSync(path.dirname(fileB), { recursive: true });
+    fs.copyFileSync(fileA, fileB);
+  } else if (!existsA && existsB) {
+    fs.mkdirSync(path.dirname(fileA), { recursive: true });
+    fs.copyFileSync(fileB, fileA);
+  }
+}
+
 try {
-  fs.copyFileSync(path.join(__dirname, 'css', 'styles.css'), path.join(__dirname, 'styles.css'));
-  fs.copyFileSync(path.join(__dirname, 'js', 'main.js'), path.join(__dirname, 'main.js'));
-  fs.copyFileSync(path.join(__dirname, 'js', 'three-cake.js'), path.join(__dirname, 'three-cake.js'));
-  console.log('✓ Root-level fallback assets verified.');
+  syncPair(path.join(__dirname, 'styles.css'), path.join(__dirname, 'css', 'styles.css'));
+  syncPair(path.join(__dirname, 'main.js'), path.join(__dirname, 'js', 'main.js'));
+  syncPair(path.join(__dirname, 'three-cake.js'), path.join(__dirname, 'js', 'three-cake.js'));
+  console.log('✓ Root-level and subfolder assets synchronized successfully.');
 } catch (err) {
-  console.error('Error copying root fallbacks:', err);
+  console.error('Error synchronizing assets:', err);
 }
 
 function cleanAndRecreateDir(dirPath) {
